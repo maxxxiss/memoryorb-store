@@ -7,5 +7,7 @@ public
 preview-*.png
 redesign.cjs
 finish.cjs
+english.cjs
+restore-original.cjs
 server.mjs
 *.test.mjs
