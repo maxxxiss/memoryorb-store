@@ -1,0 +1,11 @@
+node_modules
+.env
+.env.*
+.git
+orders
+public
+preview-*.png
+redesign.cjs
+finish.cjs
+server.mjs
+*.test.mjs
