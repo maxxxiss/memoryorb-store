@@ -39,7 +39,7 @@ function changePhoto(kind,animated=true){
 function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>el.classList.remove('show'),2800)}
 function updateCart(){
  const items=cart.reduce((sum,x)=>sum+x.count*x.bundle,0),amount=cart.reduce((sum,x)=>sum+x.count*bundles[x.bundle],0);
- $('#checkout').disabled=!checkoutReady||!cart.length; $('#bag-count').textContent=items;$('#drawer-count').textContent=items?'('+items+' orbs)':'';$('#cart-subtotal').textContent=money(amount);
+ $('#checkout').disabled=!checkoutReady||!cart.length; $('#bag-count').textContent=items;$('#drawer-count').textContent=items?` (${items} ${items===1?'orb':'orbs'})`:'';$('#cart-subtotal').textContent=money(amount);
  const container=$('#cart-items');container.textContent='';
  if(!cart.length){container.innerHTML='<div class="cart-empty"><strong>Your bag is empty.</strong><span>Find your first MemoryOrb.</span></div>';return}
  cart.forEach((item,index)=>{
