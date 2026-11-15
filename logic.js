@@ -1076,14 +1076,16 @@ class Component extends DCLogic {
       cartItems, cartAdd, cartAddDisp, cartSub: money(cartTotalCents), cartCount: cartCountN, cartBadgeDisp: cartCountN > 0 ? 'grid' : 'none',
       cartEmptyDisp: cartLines.length ? 'none' : 'flex', cartFullDisp: cartLines.length ? 'block' : 'none',
       cartNoteDisp: this.state.cnote ? 'flex' : 'none',
-      cartCheckout: () => {
-        const items = [];
-        for (const l of cartLines) {
-          const id = SHOPIFY_VARIANTS[cs[l.colour].name];
-          if (!id) { this.setState({ cnote: true }); return; }
-          items.push(id + ':' + l.qty);
-        }
-        if (items.length) window.location.href = 'https://' + SHOPIFY_DOMAIN + '/cart/' + items.join(',') + '?checkout';
+      cartCheckout: async () => {
+        if (this._checkoutBusy || !cartLines.length) return;
+        this._checkoutBusy = true;
+        try {
+          const response = await fetch('/api/checkout', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:cartLines.map(l=>({colour:l.colour,qty:l.qty}))})});
+          const data = await response.json();
+          if (!response.ok) throw Error(data.error || 'Unable to open checkout.');
+          window.location.assign(data.url);
+        } catch (error) { this.setState({cnote:true}); }
+        finally { this._checkoutBusy=false; }
       },
       goCart: (e) => { try { e.preventDefault(); } catch (x) {} this.setState({ page: 'cart', menu: false, cnote: false }); try { window.scrollTo(0, 0); } catch (x) {} },
       addToCart: (e) => {
